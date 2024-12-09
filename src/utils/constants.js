@@ -3,17 +3,13 @@ export const defaultKPIConfig = [
     id: 'apiResponseTime',
     label: 'Temps de réponse API',
     isVisible: true,
-    threshold: 1000,
-    type: 'graph',
-    notifyChannel: 'ntfy.sh',
+    threshold: 100,
   },
   {
     id: 'cpuUsage',
     label: 'CPU',
     isVisible: true,
     threshold: 80,
-    type: 'gauge',
-    notifyChannel: 'ntfy.sh',
   },
   {
     id: 'memoryUsage',

@@ -1,8 +1,15 @@
 import { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { defaultKPIConfig } from '../../utils/constants';
 
 export default function KPIConfig({ kpis, onSave, isDarkMode }) {
-  const [selectedKPIs, setSelectedKPIs] = useState(kpis);
+  const [selectedKPIs, setSelectedKPIs] = useState(() => {
+    // Assurez-vous que l'état initial correspond exactement aux props
+    return kpis.map((kpi) => ({
+      ...kpi,
+      label: kpi.label || defaultKPIConfig.find((k) => k.id === kpi.id)?.label,
+    }));
+  });
   const [isOpen, setIsOpen] = useState(false);
 
   // Séparer les KPIs en deux catégories
