@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 import MetricCard from '@/components/MetricCard';
 import Chart from '@/components/Chart';
 import { chartConfig, getChartOptions } from '@/utils/chartConfig';
-import { checkThresholds } from '@/services/notificationService';
+// import { checkThresholds } from '@/services/notificationService';
 import { saveKPIConfig, loadKPIConfig } from '@/utils/storage';
 import { defaultKPIConfig } from '@/utils/constants';
 
@@ -35,6 +35,11 @@ export default function Home() {
   const [kpiConfig, setKPIConfig] = useState(
     () => loadKPIConfig() || defaultKPIConfig,
   );
+
+  const metrics = {
+    cpu: 'CPU',
+    responseTime: 'Temps de réponse API',
+  };
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
@@ -105,13 +110,12 @@ export default function Home() {
       setSystemMetrics(mockSystemData);
       setBusinessMetrics(mockBusinessData);
 
-      // Vérification des seuils avec les métriques combinées
-      const currentMetrics = {
-        ...systemMetrics,
-        ...businessMetrics,
-      };
-
-      checkThresholds(currentMetrics, kpiConfig);
+      // Commenté pour désactiver les notifications
+      // const currentMetrics = {
+      //   ...systemMetrics,
+      //   ...businessMetrics,
+      // };
+      // checkThresholds(currentMetrics, kpiConfig);
     };
 
     const interval = setInterval(fetchMetrics, 5000);
@@ -171,7 +175,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {visibleSystemMetrics.length > 0 && (
               <MetricCard
-                title="Métriques Système"
+                title={metrics.cpu}
                 metrics={visibleSystemMetrics.map((metric) => ({
                   label: metric.label,
                   value: formatMetricValue(metric.value, metric.id),
