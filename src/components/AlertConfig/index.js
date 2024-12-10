@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function AlertConfig({ kpi, onSave, isDarkMode }) {
   const [threshold, setThreshold] = useState(kpi.threshold || 0);
   const [notifyChannel, setNotifyChannel] = useState(
     kpi.notifyChannel || 'ntfy.sh',
   );
+
+  const { t } = useTranslation();
 
   return (
     <div
@@ -13,13 +16,13 @@ export default function AlertConfig({ kpi, onSave, isDarkMode }) {
       }`}
     >
       <h4 className="text-lg font-semibold mb-4">
-        Configuration des alertes - {kpi.label}
+        {t('kpi.alert.title', { label: kpi.label })}
       </h4>
 
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium mb-1">
-            Seuil d&apos;alerte
+            {t('kpi.threshold')}
           </label>
           <input
             type="number"
@@ -35,7 +38,7 @@ export default function AlertConfig({ kpi, onSave, isDarkMode }) {
 
         <div>
           <label className="block text-sm font-medium mb-1">
-            Canal de notification
+            {t('kpi.notificationChannel')}
           </label>
           <select
             value={notifyChannel}
@@ -46,9 +49,9 @@ export default function AlertConfig({ kpi, onSave, isDarkMode }) {
                 : 'bg-white border-gray-300'
             }`}
           >
-            <option value="ntfy.sh">ntfy.sh</option>
-            <option value="email">Email</option>
-            <option value="slack">Slack</option>
+            <option value="ntfy.sh">{t('alert.providers.ntfy')}</option>
+            <option value="email">{t('alert.providers.email')}</option>
+            <option value="slack">{t('alert.providers.slack')}</option>
           </select>
         </div>
 
@@ -56,7 +59,7 @@ export default function AlertConfig({ kpi, onSave, isDarkMode }) {
           onClick={() => onSave({ threshold, notifyChannel })}
           className="w-full px-4 py-2 bg-[#a78bfa] text-white rounded-lg hover:bg-[#8b5cf6]"
         >
-          Enregistrer
+          {t('kpi.save')}
         </button>
       </div>
     </div>

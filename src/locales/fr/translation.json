@@ -1,0 +1,64 @@
+{
+  "common": {
+    "welcome": "Bienvenue",
+    "description": "ZakHarmony - Votre Plateforme Musicale",
+    "backoffice": "BackOffice",
+    "dashboard": "Tableau de bord",
+    "settings": "Paramètres",
+    "darkMode": "Mode sombre",
+    "lightMode": "Mode clair",
+    "language": "Langue",
+    "switchLanguage": "Changer la langue en {{language}}",
+    "loading": "Chargement..."
+  },
+  "metrics": {
+    "title": "Métriques Système",
+    "realtime": "Métriques en temps réel",
+    "system": {
+      "title": "Métriques Système",
+      "apiResponseTime": "Temps de réponse API",
+      "cpuUsage": "Utilisation CPU",
+      "memoryUsage": "Utilisation Mémoire",
+      "redisLatency": "Latence Redis",
+      "bandwidth": "Bande passante"
+    },
+    "business": {
+      "title": "Métriques Métier",
+      "streamCount": "Nombre de streams",
+      "activeUsers": "Utilisateurs actifs",
+      "storageUsed": "Stockage utilisé",
+      "requestSuccessRate": "Taux de succès des requêtes",
+      "mediaProcessingTime": "Temps de traitement média"
+    }
+  },
+  "kpiConfig": {
+    "title": "Configuration des KPIs",
+    "configure": "Configurer les KPIs",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "threshold": "Seuil d'alerte",
+    "notifyChannel": "Canal de notification",
+    "visualizationType": "Type de visualisation",
+    "visualization": {
+      "counter": "Compteur",
+      "gauge": "Jauge",
+      "chart": "Graphique"
+    },
+    "alert": {
+      "title": "Configuration des alertes - {label}",
+      "threshold": "Seuil d'alerte",
+      "notificationChannel": "Canal de notification"
+    },
+    "providers": {
+      "ntfy": "Notifications via ntfy.sh"
+    }
+  },
+  "login": {
+    "title": "ZakHarmony - Connexion",
+    "subtitle": "Connexion BackOffice",
+    "email": "Adresse email",
+    "password": "Mot de passe",
+    "submit": "Se connecter",
+    "error": "Identifiants invalides"
+  }
+}

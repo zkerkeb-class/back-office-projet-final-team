@@ -4,11 +4,20 @@ import Navbar from '@/components/Navbar';
 import MetricCard from '@/components/MetricCard';
 import Chart from '@/components/Chart';
 import { chartConfig, getChartOptions } from '@/utils/chartConfig';
-// import { checkThresholds } from '@/services/notificationService';
+import { checkThresholds } from '@/services/notificationService';
 import { saveKPIConfig, loadKPIConfig } from '@/utils/storage';
 import { defaultKPIConfig } from '@/utils/constants';
+import dynamic from 'next/dynamic';
+import { useTranslation } from 'react-i18next';
+
+// Précharger le composant
+const DashboardTitle = dynamic(() => import('@/components/DashboardTitle'), {
+  ssr: true,
+  loading: () => null, // Suppression du placeholder qui peut causer un layout shift
+});
 
 export default function Home() {
+  const { t } = useTranslation();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [systemMetrics, setSystemMetrics] = useState({
     apiResponseTime: 0,
@@ -37,8 +46,8 @@ export default function Home() {
   );
 
   const metrics = {
-    cpu: 'CPU',
-    responseTime: 'Temps de réponse API',
+    cpu: 'metrics.system.title',
+    business: 'metrics.business.title',
   };
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
@@ -57,9 +66,13 @@ export default function Home() {
         ].includes(kpi.id),
     )
     .map((kpi) => ({
-      label: kpi.label,
+      label: `metrics.system.${kpi.id}`,
       value: systemMetrics[kpi.id],
       id: kpi.id,
+      category: 'system',
+      threshold: kpi.threshold,
+      visualizationType: kpi.visualizationType,
+      history: metricsHistory.systemData,
     }));
 
   // Filtrer les métriques métier visibles
@@ -76,9 +89,13 @@ export default function Home() {
         ].includes(kpi.id),
     )
     .map((kpi) => ({
-      label: kpi.label,
+      label: `metrics.business.${kpi.id}`,
       value: businessMetrics[kpi.id],
       id: kpi.id,
+      category: 'business',
+      threshold: kpi.threshold,
+      visualizationType: kpi.visualizationType,
+      history: metricsHistory.businessData,
     }));
 
   useEffect(() => {
@@ -110,17 +127,18 @@ export default function Home() {
       setSystemMetrics(mockSystemData);
       setBusinessMetrics(mockBusinessData);
 
-      // Commenté pour désactiver les notifications
-      // const currentMetrics = {
-      //   ...systemMetrics,
-      //   ...businessMetrics,
-      // };
-      // checkThresholds(currentMetrics, kpiConfig);
+      const currentMetrics = {
+        ...mockSystemData,
+        ...mockBusinessData,
+      };
+
+      // Vérifier les seuils et envoyer les notifications
+      checkThresholds(currentMetrics, kpiConfig);
     };
 
     const interval = setInterval(fetchMetrics, 5000);
     return () => clearInterval(interval);
-  }, [kpiConfig, systemMetrics, businessMetrics]);
+  }, [kpiConfig]);
 
   const handleKPIConfigSave = (newConfig) => {
     setKPIConfig(newConfig);
@@ -130,16 +148,32 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>ZakHarmony - BackOffice</title>
-        <meta
-          name="description"
-          content="ZakHarmony - Votre plateforme musicale"
-        />
+        <title>{t('common.welcome')} - ZakHarmony</title>
+        <meta name="description" content={t('common.description')} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {/* Optimisation critique du rendu des polices */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              @font-face {
+                font-family: system-ui;
+                font-style: normal;
+                font-weight: 700;
+                font-display: optional;
+                src: local("-apple-system"), local("BlinkMacSystemFont"), local("Segoe UI"), local("Roboto"), local("Oxygen"), local("Ubuntu"), local("Cantarell"), local("Helvetica Neue");
+                size-adjust: 100%;
+                ascent-override: 90%;
+                descent-override: 10%;
+              }
+            `,
+          }}
+        />
       </Head>
 
       <div
-        className={`min-h-screen ${isDarkMode ? 'bg-[#121212]' : 'bg-[#f8f9fa]'} transition-colors duration-300`}
+        className={`min-h-screen ${isDarkMode ? 'bg-[#121212]' : 'bg-[#f8f9fa]'}`}
+        style={{ contain: 'paint layout' }}
       >
         <Navbar
           isDarkMode={isDarkMode}
@@ -148,23 +182,11 @@ export default function Home() {
           onKPIConfigSave={handleKPIConfigSave}
         />
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="mb-12">
-            <h1
-              className={`text-4xl font-bold tracking-tight ${
-                isDarkMode ? 'text-white' : 'text-gray-900'
-              }`}
-            >
-              Dashboard
-            </h1>
-            <p
-              className={`mt-3 text-lg ${
-                isDarkMode ? 'text-gray-400' : 'text-gray-600'
-              }`}
-            >
-              Surveillance en temps réel de la plateforme
-            </p>
-          </div>
+        <main
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+          style={{ contain: 'paint layout' }}
+        >
+          <DashboardTitle isDarkMode={isDarkMode} />
 
           <Chart
             data={chartConfig(metricsHistory)}
@@ -186,7 +208,7 @@ export default function Home() {
 
             {visibleBusinessMetrics.length > 0 && (
               <MetricCard
-                title="Métriques Métier"
+                title={metrics.business}
                 metrics={visibleBusinessMetrics.map((metric) => ({
                   label: metric.label,
                   value: formatMetricValue(metric.value, metric.id),

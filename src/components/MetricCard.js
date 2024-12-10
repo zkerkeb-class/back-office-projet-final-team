@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
-export default function MetricCard({ title, metrics, isDarkMode }) {
+export default function MetricCard({ metrics, isDarkMode }) {
+  const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export default function MetricCard({ title, metrics, isDarkMode }) {
     >
       <div className="bg-[#a78bfa] px-8 py-6">
         <h2 className="text-2xl font-semibold text-white tracking-tight">
-          {title}
+          {t('metrics.title')}
         </h2>
       </div>
       <div className="p-8">
@@ -36,7 +38,7 @@ export default function MetricCard({ title, metrics, isDarkMode }) {
               <span
                 className={`text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
               >
-                {metric.label}
+                {t(metric.label)}
               </span>
               <span
                 className={`font-semibold text-lg ${isDarkMode ? 'text-[#a78bfa]' : 'text-[#a78bfa]'}`}

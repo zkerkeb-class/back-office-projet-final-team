@@ -1,18 +1,23 @@
 import { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { defaultKPIConfig } from '../../utils/constants';
+import { useTranslation } from 'react-i18next';
+import KPISettings from './KPISettings';
 
 export default function KPIConfig({ kpis, onSave, isDarkMode }) {
+  const { t } = useTranslation();
   const [selectedKPIs, setSelectedKPIs] = useState(() => {
-    // Assurez-vous que l'état initial correspond exactement aux props
-    return kpis.map((kpi) => ({
-      ...kpi,
-      label: kpi.label || defaultKPIConfig.find((k) => k.id === kpi.id)?.label,
-    }));
+    return kpis.map((kpi) => {
+      const defaultKPI = defaultKPIConfig.find((k) => k.id === kpi.id);
+      return {
+        ...defaultKPI,
+        ...kpi,
+      };
+    });
   });
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedKPIForSettings, setSelectedKPIForSettings] = useState(null);
 
-  // Séparer les KPIs en deux catégories
   const systemKPIs = selectedKPIs.filter((kpi) =>
     [
       'apiResponseTime',
@@ -36,7 +41,6 @@ export default function KPIConfig({ kpis, onSave, isDarkMode }) {
   const onDragEnd = (result) => {
     const { source, destination } = result;
 
-    // Arrêter si pas de destination ou si même position
     if (
       !destination ||
       (source.droppableId === destination.droppableId &&
@@ -45,7 +49,6 @@ export default function KPIConfig({ kpis, onSave, isDarkMode }) {
       return;
     }
 
-    // Empêcher le déplacement entre les tableaux
     if (source.droppableId !== destination.droppableId) {
       return;
     }
@@ -54,26 +57,32 @@ export default function KPIConfig({ kpis, onSave, isDarkMode }) {
     const currentList = isSystemList ? systemKPIs : businessKPIs;
     const otherKPIs = isSystemList ? businessKPIs : systemKPIs;
 
-    // Réorganiser la liste concernée
     const items = Array.from(currentList);
     const [reorderedItem] = items.splice(source.index, 1);
     items.splice(destination.index, 0, reorderedItem);
 
-    // Mettre à jour la liste complète en préservant l'autre tableau
     setSelectedKPIs([
       ...(isSystemList ? items : otherKPIs),
       ...(isSystemList ? otherKPIs : items),
     ]);
   };
 
-  const KPIList = ({ items, title, droppableId }) => (
+  const handleKPISettingsSave = (updatedKPI) => {
+    const updatedKPIs = selectedKPIs.map((kpi) =>
+      kpi.id === updatedKPI.id ? updatedKPI : kpi,
+    );
+    setSelectedKPIs(updatedKPIs);
+    setSelectedKPIForSettings(null);
+  };
+
+  const KPIList = ({ items, droppableId }) => (
     <div className="mb-6">
       <h4
         className={`text-sm font-medium mb-2 ${
           isDarkMode ? 'text-gray-400' : 'text-gray-600'
         }`}
       >
-        {title}
+        {t(`metrics.${droppableId}.title`)}
       </h4>
       <Droppable droppableId={droppableId}>
         {(provided) => (
@@ -113,13 +122,10 @@ export default function KPIConfig({ kpis, onSave, isDarkMode }) {
                             : 'bg-white border-gray-300'
                         } text-[#a78bfa] focus:ring-[#a78bfa]`}
                       />
-                      <span>{kpi.label}</span>
+                      <span>{t(`metrics.${droppableId}.${kpi.id}`)}</span>
                     </div>
-
                     <button
-                      onClick={() => {
-                        /* Ouvrir modal de configuration */
-                      }}
+                      onClick={() => setSelectedKPIForSettings(kpi)}
                       className="text-[#a78bfa] hover:text-[#8b5cf6] transition-colors duration-200"
                     >
                       ⚙️
@@ -149,7 +155,7 @@ export default function KPIConfig({ kpis, onSave, isDarkMode }) {
           }
         `}
       >
-        ⚙️ Configurer les KPIs
+        ⚙️ {t('kpiConfig.configure')}
       </button>
 
       {isOpen && (
@@ -160,19 +166,11 @@ export default function KPIConfig({ kpis, onSave, isDarkMode }) {
               : 'bg-white text-gray-800 shadow-xl'
           }`}
         >
-          <h3 className="text-lg font-semibold mb-4">Configuration des KPIs</h3>
+          <h3 className="text-lg font-semibold mb-4">{t('kpiConfig.title')}</h3>
 
           <DragDropContext onDragEnd={onDragEnd}>
-            <KPIList
-              items={systemKPIs}
-              title="Métriques Système"
-              droppableId="system"
-            />
-            <KPIList
-              items={businessKPIs}
-              title="Métriques Métier"
-              droppableId="business"
-            />
+            <KPIList items={systemKPIs} droppableId="system" />
+            <KPIList items={businessKPIs} droppableId="business" />
           </DragDropContext>
 
           <div className="mt-4 flex justify-end space-x-2">
@@ -184,19 +182,28 @@ export default function KPIConfig({ kpis, onSave, isDarkMode }) {
                   : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
               }`}
             >
-              Annuler
+              {t('kpiConfig.cancel')}
             </button>
             <button
               onClick={() => {
                 onSave(selectedKPIs);
                 setIsOpen(false);
               }}
-              className="px-3 py-1 rounded-lg bg-[#a78bfa] text-white hover:bg-[#8b5cf6] transition-all duration-200"
+              className="px-3 py-1 bg-[#a78bfa] text-white rounded-lg hover:bg-[#8b5cf6] transition-all duration-200"
             >
-              Enregistrer
+              {t('kpiConfig.save')}
             </button>
           </div>
         </div>
+      )}
+
+      {selectedKPIForSettings && (
+        <KPISettings
+          kpi={selectedKPIForSettings}
+          onSave={handleKPISettingsSave}
+          onClose={() => setSelectedKPIForSettings(null)}
+          isDarkMode={isDarkMode}
+        />
       )}
     </div>
   );

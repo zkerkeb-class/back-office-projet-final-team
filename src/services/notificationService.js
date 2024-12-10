@@ -1,80 +1,59 @@
 // Configuration
 const COOLDOWN_PERIOD = 300000; // 5 minutes de cooldown
-const MAX_RETRIES = 3;
-const RETRY_DELAY = 5000; // 5 secondes entre les tentatives
-const NTFY_TOPIC =
-  'zakharmony-alerts-' + Math.random().toString(36).substring(7); // Topic unique
+const NTFY_TOPIC = 'zakharmony-alerts'; // Topic fixe pour les alertes
 let lastNotificationTime = {};
-let notificationQueue = [];
-let isProcessingQueue = false;
 
-// Fonction pour traiter la file d'attente
-const processQueue = async () => {
-  if (isProcessingQueue || notificationQueue.length === 0) return;
-
-  isProcessingQueue = true;
-  const { message, retries = 0 } = notificationQueue[0];
-
+export const sendNotification = async (title, message, priority = 3) => {
   try {
     const now = Date.now();
+    const notificationKey = `${title}-${message}`;
+
+    // Vérifier le cooldown
     if (
-      lastNotificationTime[message] &&
-      now - lastNotificationTime[message] < COOLDOWN_PERIOD
+      lastNotificationTime[notificationKey] &&
+      now - lastNotificationTime[notificationKey] < COOLDOWN_PERIOD
     ) {
-      setTimeout(processQueue, COOLDOWN_PERIOD);
-      return;
+      return false;
     }
 
     const response = await fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
       method: 'POST',
-      body: message,
       headers: {
-        'Content-Type': 'text/plain',
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        topic: NTFY_TOPIC,
+        title,
+        message,
+        priority,
+        tags: ['warning'],
+      }),
     });
 
-    if (response.ok) {
-      lastNotificationTime[message] = now;
-      notificationQueue.shift(); // Retirer la notification réussie
-    } else if (response.status === 429 && retries < MAX_RETRIES) {
-      // Remettre en file d'attente avec un compteur de tentatives
-      notificationQueue[0].retries = retries + 1;
-      setTimeout(processQueue, RETRY_DELAY);
-      return;
-    } else {
-      notificationQueue.shift(); // Abandonner après MAX_RETRIES
-    }
-  } catch (error) {
-    notificationQueue.shift(); // Retirer en cas d'erreur
-  } finally {
-    isProcessingQueue = false;
-    if (notificationQueue.length > 0) {
-      setTimeout(processQueue, RETRY_DELAY);
-    }
-  }
-};
-
-export const sendNotification = async (message, channel = 'ntfy.sh') => {
-  if (channel === 'ntfy.sh') {
-    // Vérifier si une notification similaire est déjà en attente
-    if (!notificationQueue.some((item) => item.message === message)) {
-      notificationQueue.push({ message });
-      processQueue();
-    }
-    return true;
-  }
-  return false;
-};
-
-export const checkThresholds = (metrics, kpis) => {
-  kpis.forEach((kpi) => {
-    if (!kpi.threshold || !kpi.isVisible) return;
-
-    const value = metrics[kpi.id];
-    if (value > kpi.threshold) {
-      sendNotification(
-        `Alerte: ${kpi.label} (${value}) a dépassé le seuil de ${kpi.threshold}`,
+    if (!response.ok) {
+      throw new Error(
+        `Échec de l'envoi de la notification: ${response.statusText}`,
       );
     }
-  });
+
+    lastNotificationTime[notificationKey] = now;
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const checkThresholds = async (metrics, kpiConfig) => {
+  for (const kpi of kpiConfig) {
+    if (!kpi.threshold || !kpi.isVisible) continue;
+
+    const currentValue = metrics[kpi.id];
+    if (currentValue > kpi.threshold) {
+      await sendNotification(
+        `Alerte KPI: ${kpi.id}`,
+        `La métrique ${kpi.id} (${currentValue}) a dépassé le seuil de ${kpi.threshold}`,
+        4,
+      );
+    }
+  }
 };

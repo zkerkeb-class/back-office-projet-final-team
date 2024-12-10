@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 export default function Login() {
   const router = useRouter();
@@ -10,6 +11,7 @@ export default function Login() {
     password: '',
   });
   const [error, setError] = useState('');
+  const { t } = useTranslation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +29,7 @@ export default function Login() {
   return (
     <>
       <Head>
-        <title>ZakHarmony - Connexion</title>
+        <title>{t('title.login')}</title>
         <meta
           name="description"
           content="ZakHarmony - Connexion au backoffice"
