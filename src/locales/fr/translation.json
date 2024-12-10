@@ -45,7 +45,7 @@
       "chart": "Graphique"
     },
     "alert": {
-      "title": "Configuration des alertes - {label}",
+      "title": "Configuration des alertes",
       "threshold": "Seuil d'alerte",
       "notificationChannel": "Canal de notification"
     },

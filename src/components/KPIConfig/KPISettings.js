@@ -11,7 +11,7 @@ export default function KPISettings({ kpi, onSave, isDarkMode, onClose }) {
   const { t } = useTranslation();
   const [settings, setSettings] = useState({
     threshold: kpi.threshold || 0,
-    notifyChannel: 'ntfy.sh',
+    notifyChannel: kpi.notifyChannel || 'ntfy.sh',
     visualizationType: kpi.visualizationType || visualizationTypes.COUNTER,
   });
 
@@ -31,9 +31,7 @@ export default function KPISettings({ kpi, onSave, isDarkMode, onClose }) {
         }`}
       >
         <h3 className="text-lg font-semibold mb-4">
-          {t('kpiConfig.alert.title', {
-            label: t(`metrics.${kpi.category}.${kpi.id}`),
-          })}
+          {t('kpiConfig.alert.title')} - {t(kpi.label)}
         </h3>
 
         <div className="space-y-4">
@@ -83,12 +81,22 @@ export default function KPISettings({ kpi, onSave, isDarkMode, onClose }) {
           </div>
 
           <div>
-            <p className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-medium mb-1">
               {t('kpiConfig.notifyChannel')}
-            </p>
-            <p className="text-sm text-gray-500">
-              {t('kpiConfig.providers.ntfy')}
-            </p>
+            </label>
+            <select
+              value={settings.notifyChannel}
+              onChange={(e) =>
+                setSettings({ ...settings, notifyChannel: e.target.value })
+              }
+              className={`w-full p-2 rounded-lg border ${
+                isDarkMode
+                  ? 'bg-[#2a2a2a] border-gray-600'
+                  : 'bg-white border-gray-300'
+              }`}
+            >
+              <option value="ntfy.sh">{t('kpiConfig.providers.ntfy')}</option>
+            </select>
           </div>
         </div>
 
@@ -97,7 +105,7 @@ export default function KPISettings({ kpi, onSave, isDarkMode, onClose }) {
             onClick={onClose}
             className={`px-4 py-2 rounded-lg ${
               isDarkMode
-                ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                ? 'bg-[#2a2a2a] text-gray-300 hover:bg-[#333333]'
                 : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
             }`}
           >

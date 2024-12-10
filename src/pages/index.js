@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import Navbar from '@/components/Navbar';
-import MetricCard from '@/components/MetricCard';
-import Chart from '@/components/Chart';
-import { chartConfig, getChartOptions } from '@/utils/chartConfig';
-import { checkThresholds } from '@/services/notificationService';
-import { saveKPIConfig, loadKPIConfig } from '@/utils/storage';
-import { defaultKPIConfig } from '@/utils/constants';
-import dynamic from 'next/dynamic';
+import MetricCard from '@/components/MetricCard/index';
 import { useTranslation } from 'react-i18next';
+import { defaultKPIConfig } from '@/utils/constants';
+import { loadKPIConfig, saveKPIConfig } from '@/utils/storage';
+import { checkThresholds } from '@/services/notificationService';
+import { getChartOptions } from '@/utils/chartConfig';
+import Chart from '@/components/Chart';
+import Navbar from '@/components/Navbar';
+import dynamic from 'next/dynamic';
 
 // Précharger le composant
 const DashboardTitle = dynamic(() => import('@/components/DashboardTitle'), {
@@ -37,18 +37,25 @@ export default function Home() {
 
   const [metricsHistory, setMetricsHistory] = useState({
     labels: [],
-    systemData: [],
-    businessData: [],
+    systemMetrics: {
+      cpuUsage: [],
+      memoryUsage: [],
+      apiResponseTime: [],
+      redisLatency: [],
+      bandwidth: [],
+    },
+    businessMetrics: {
+      streamCount: [],
+      activeUsers: [],
+      storageUsed: [],
+      requestSuccessRate: [],
+      mediaProcessingTime: [],
+    },
   });
 
   const [kpiConfig, setKPIConfig] = useState(
     () => loadKPIConfig() || defaultKPIConfig,
   );
-
-  const metrics = {
-    cpu: 'metrics.system.title',
-    business: 'metrics.business.title',
-  };
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
@@ -72,7 +79,7 @@ export default function Home() {
       category: 'system',
       threshold: kpi.threshold,
       visualizationType: kpi.visualizationType,
-      history: metricsHistory.systemData,
+      history: metricsHistory.systemMetrics[kpi.id] || [],
     }));
 
   // Filtrer les métriques métier visibles
@@ -95,7 +102,7 @@ export default function Home() {
       category: 'business',
       threshold: kpi.threshold,
       visualizationType: kpi.visualizationType,
-      history: metricsHistory.businessData,
+      history: metricsHistory.businessMetrics[kpi.id] || [],
     }));
 
   useEffect(() => {
@@ -115,14 +122,36 @@ export default function Home() {
         mediaProcessingTime: Math.random() * 60,
       };
 
-      setMetricsHistory((prev) => ({
-        labels: [...prev.labels, new Date().toLocaleTimeString()].slice(-10),
-        systemData: [...prev.systemData, mockSystemData.cpuUsage].slice(-10),
-        businessData: [
-          ...prev.businessData,
-          mockBusinessData.activeUsers,
-        ].slice(-10),
-      }));
+      setMetricsHistory((prev) => {
+        const newLabels = [
+          ...prev.labels,
+          new Date().toLocaleTimeString(),
+        ].slice(-10);
+        const newSystemMetrics = {};
+        const newBusinessMetrics = {};
+
+        // Mise à jour des métriques système
+        Object.keys(prev.systemMetrics).forEach((key) => {
+          newSystemMetrics[key] = [
+            ...(prev.systemMetrics[key] || []),
+            mockSystemData[key],
+          ].slice(-10);
+        });
+
+        // Mise à jour des métriques business
+        Object.keys(prev.businessMetrics).forEach((key) => {
+          newBusinessMetrics[key] = [
+            ...(prev.businessMetrics[key] || []),
+            mockBusinessData[key],
+          ].slice(-10);
+        });
+
+        return {
+          labels: newLabels,
+          systemMetrics: newSystemMetrics,
+          businessMetrics: newBusinessMetrics,
+        };
+      });
 
       setSystemMetrics(mockSystemData);
       setBusinessMetrics(mockBusinessData);
@@ -132,7 +161,6 @@ export default function Home() {
         ...mockBusinessData,
       };
 
-      // Vérifier les seuils et envoyer les notifications
       checkThresholds(currentMetrics, kpiConfig);
     };
 
@@ -189,31 +217,46 @@ export default function Home() {
           <DashboardTitle isDarkMode={isDarkMode} />
 
           <Chart
-            data={chartConfig(metricsHistory)}
+            data={{
+              labels: metricsHistory.labels,
+              datasets: [
+                {
+                  label: 'CPU Usage (%)',
+                  data: metricsHistory.systemMetrics.cpuUsage || [],
+                  borderColor: '#a78bfa',
+                  backgroundColor: '#a78bfa',
+                  pointBackgroundColor: '#a78bfa',
+                  pointBorderColor: '#a78bfa',
+                  tension: 0.3,
+                },
+                {
+                  label: 'Active Users',
+                  data: metricsHistory.businessMetrics.activeUsers || [],
+                  borderColor: '#c4b5fd',
+                  backgroundColor: '#c4b5fd',
+                  pointBackgroundColor: '#c4b5fd',
+                  pointBorderColor: '#c4b5fd',
+                  tension: 0.3,
+                },
+              ],
+            }}
             options={getChartOptions(isDarkMode)}
             isDarkMode={isDarkMode}
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 gap-8 mb-8">
             {visibleSystemMetrics.length > 0 && (
               <MetricCard
-                title={metrics.cpu}
-                metrics={visibleSystemMetrics.map((metric) => ({
-                  label: metric.label,
-                  value: formatMetricValue(metric.value, metric.id),
-                }))}
+                metrics={visibleSystemMetrics}
                 isDarkMode={isDarkMode}
+                category="system"
               />
             )}
-
             {visibleBusinessMetrics.length > 0 && (
               <MetricCard
-                title={metrics.business}
-                metrics={visibleBusinessMetrics.map((metric) => ({
-                  label: metric.label,
-                  value: formatMetricValue(metric.value, metric.id),
-                }))}
+                metrics={visibleBusinessMetrics}
                 isDarkMode={isDarkMode}
+                category="business"
               />
             )}
           </div>
@@ -221,27 +264,4 @@ export default function Home() {
       </div>
     </>
   );
-}
-
-// Fonction utilitaire pour formater les valeurs selon le type de métrique
-function formatMetricValue(value, metricId) {
-  if (typeof value !== 'number') return value;
-
-  switch (metricId) {
-    case 'apiResponseTime':
-    case 'redisLatency':
-      return `${value.toFixed(2)} ms`;
-    case 'cpuUsage':
-    case 'memoryUsage':
-    case 'requestSuccessRate':
-      return `${value.toFixed(1)}%`;
-    case 'bandwidth':
-      return `${(value / 1000).toFixed(2)} MB/s`;
-    case 'mediaProcessingTime':
-      return `${value.toFixed(1)} s`;
-    case 'storageUsed':
-      return `${value} GB`;
-    default:
-      return value.toString();
-  }
 }

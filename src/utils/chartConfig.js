@@ -1,26 +1,26 @@
-export const chartConfig = (metricsHistory) => ({
-  labels: metricsHistory.labels,
-  datasets: [
-    {
-      label: 'CPU Usage (%)',
-      data: metricsHistory.systemData,
-      borderColor: '#a78bfa',
-      backgroundColor: '#a78bfa',
-      pointBackgroundColor: '#a78bfa',
-      pointBorderColor: '#a78bfa',
-      tension: 0.3,
-    },
-    {
-      label: 'Active Users',
-      data: metricsHistory.businessData,
-      borderColor: '#c4b5fd',
-      backgroundColor: '#c4b5fd',
-      pointBackgroundColor: '#c4b5fd',
-      pointBorderColor: '#c4b5fd',
-      tension: 0.3,
-    },
-  ],
-});
+export const chartConfig = (metricsHistory, metricId) => {
+  if (!metricId) return null;
+
+  const data =
+    metricsHistory.systemMetrics?.[metricId] ||
+    metricsHistory.businessMetrics?.[metricId] ||
+    [];
+
+  return {
+    labels: metricsHistory.labels,
+    datasets: [
+      {
+        label: metricId,
+        data: data,
+        borderColor: '#a78bfa',
+        backgroundColor: '#a78bfa',
+        pointBackgroundColor: '#a78bfa',
+        pointBorderColor: '#a78bfa',
+        tension: 0.3,
+      },
+    ],
+  };
+};
 
 export const getChartOptions = (isDarkMode) => ({
   responsive: true,

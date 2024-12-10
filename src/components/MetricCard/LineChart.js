@@ -15,12 +15,12 @@ export default function LineChart({ data, threshold, isDarkMode }) {
     // Clear canvas
     ctx.clearRect(0, 0, width, height);
 
-    if (data.length < 2) return;
+    if (!Array.isArray(data) || data.length < 2) return;
 
     // Calculate scales
     const minValue = Math.min(...data);
     const maxValue = Math.max(...data);
-    const valueRange = maxValue - minValue;
+    const valueRange = maxValue - minValue || 1; // Éviter la division par zéro
 
     // Draw axes
     ctx.beginPath();

@@ -2,20 +2,20 @@
 
 https://cours-react.notion.site/Partie-1-API-Backend-144858a1a0c3801fb25fd32ae9bae306
 
-- [ ] Implémenter le tableau de bord avancé avec statistiques en temps réel
+- [x] Implémenter le tableau de bord avancé avec statistiques en temps réel
 
   - [x] Intégrer les métriques de performance système
   - [x] Ajouter les métriques métier
   - [x] Mettre en place l'actualisation en temps réel
 
-- [ ] Ajouter l'interface de configuration des KPIs
+- [x] Ajouter l'interface de configuration des KPIs
 
   - [x] Permettre la sélection des KPIs à afficher
   - [x] Implémenter la réorganisation par drag & drop
   - [x] Définir des seuils d'alerte personnalisés
-  - [ ] Choisir le type de visualisation
+  - [x] Choisir le type de visualisation
 
-- [ ] Mettre en place le système de notifications pour les seuils d'alerte
+- [x] Mettre en place le système de notifications pour les seuils d'alerte
 
   - [x] Intégrer ntfy.sh pour les notifications
   - [x] Tester les notifications sur différents seuils

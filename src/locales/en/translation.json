@@ -45,7 +45,7 @@
       "chart": "Chart"
     },
     "alert": {
-      "title": "Alert Configuration - {label}",
+      "title": "Alert Configuration",
       "threshold": "Alert Threshold",
       "notificationChannel": "Notification Channel"
     },

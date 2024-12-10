@@ -45,7 +45,7 @@
       "chart": "رسم بياني"
     },
     "alert": {
-      "title": "إعداد التنبيهات - {label}",
+      "title": "إعداد التنبيهات",
       "threshold": "حد التنبيه",
       "notificationChannel": "قناة الإشعارات"
     },
