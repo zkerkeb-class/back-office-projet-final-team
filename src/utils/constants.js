@@ -4,19 +4,21 @@ export const defaultKPIConfig = [
     label: 'Temps de réponse API',
     isVisible: true,
     threshold: 100,
+    visualizationType: 'counter',
   },
   {
     id: 'cpuUsage',
     label: 'CPU',
     isVisible: true,
     threshold: 80,
+    visualizationType: 'gauge',
   },
   {
     id: 'memoryUsage',
     label: 'Mémoire',
     isVisible: true,
     threshold: 90,
-    type: 'gauge',
+    visualizationType: 'gauge',
     notifyChannel: 'ntfy.sh',
   },
   {
@@ -24,7 +26,7 @@ export const defaultKPIConfig = [
     label: 'Latence Redis',
     isVisible: true,
     threshold: 100,
-    type: 'graph',
+    visualizationType: 'chart',
     notifyChannel: 'ntfy.sh',
   },
   {
@@ -32,7 +34,7 @@ export const defaultKPIConfig = [
     label: 'Bande passante',
     isVisible: true,
     threshold: 1000,
-    type: 'counter',
+    visualizationType: 'counter',
     notifyChannel: 'ntfy.sh',
   },
   {
@@ -40,7 +42,7 @@ export const defaultKPIConfig = [
     label: 'Streams',
     isVisible: true,
     threshold: 1000,
-    type: 'counter',
+    visualizationType: 'counter',
     notifyChannel: 'ntfy.sh',
   },
   {
@@ -48,7 +50,7 @@ export const defaultKPIConfig = [
     label: 'Utilisateurs actifs',
     isVisible: true,
     threshold: 500,
-    type: 'counter',
+    visualizationType: 'counter',
     notifyChannel: 'ntfy.sh',
   },
   {
@@ -56,7 +58,7 @@ export const defaultKPIConfig = [
     label: 'Stockage utilisé',
     isVisible: true,
     threshold: 90,
-    type: 'gauge',
+    visualizationType: 'gauge',
     notifyChannel: 'ntfy.sh',
   },
   {
@@ -64,7 +66,7 @@ export const defaultKPIConfig = [
     label: 'Taux de succès',
     isVisible: true,
     threshold: 95,
-    type: 'gauge',
+    visualizationType: 'gauge',
     notifyChannel: 'ntfy.sh',
   },
   {
@@ -72,7 +74,7 @@ export const defaultKPIConfig = [
     label: 'Temps de traitement',
     isVisible: true,
     threshold: 30,
-    type: 'graph',
+    visualizationType: 'chart',
     notifyChannel: 'ntfy.sh',
   },
 ];
