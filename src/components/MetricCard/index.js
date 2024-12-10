@@ -1,20 +1,33 @@
-import { visualizationTypes } from '@/utils/constants';
+import { useTranslation } from 'react-i18next';
 import GaugeChart from './GaugeChart';
 import LineChart from './LineChart';
 
+const visualizationTypes = {
+  COUNTER: 'counter',
+  GAUGE: 'gauge',
+  CHART: 'chart',
+};
+
 export default function MetricCard({ title, metrics, isDarkMode }) {
+  const { t } = useTranslation();
+
   const renderMetricValue = (metric) => {
     switch (metric.visualizationType) {
       case visualizationTypes.GAUGE:
         return (
           <GaugeChart
             value={parseFloat(metric.value)}
+            threshold={metric.threshold}
             isDarkMode={isDarkMode}
           />
         );
       case visualizationTypes.CHART:
         return (
-          <LineChart data={metric.history || []} isDarkMode={isDarkMode} />
+          <LineChart
+            data={metric.history || []}
+            threshold={metric.threshold}
+            isDarkMode={isDarkMode}
+          />
         );
       case visualizationTypes.COUNTER:
       default:
@@ -22,9 +35,15 @@ export default function MetricCard({ title, metrics, isDarkMode }) {
           <div
             className={`text-2xl font-semibold ${
               isDarkMode ? 'text-white' : 'text-gray-900'
+            } ${
+              metric.threshold && metric.value > metric.threshold
+                ? 'text-red-500'
+                : ''
             }`}
           >
-            {metric.value}
+            {typeof metric.value === 'number'
+              ? metric.value.toLocaleString()
+              : metric.value}
           </div>
         );
     }
@@ -41,7 +60,7 @@ export default function MetricCard({ title, metrics, isDarkMode }) {
           isDarkMode ? 'text-gray-200' : 'text-gray-900'
         }`}
       >
-        {title}
+        {t(title)}
       </h3>
       <div className="space-y-4">
         {metrics.map((metric) => (
@@ -49,7 +68,7 @@ export default function MetricCard({ title, metrics, isDarkMode }) {
             <span
               className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}
             >
-              {metric.label}
+              {t(metric.label)}
             </span>
             {renderMetricValue({
               ...metric,

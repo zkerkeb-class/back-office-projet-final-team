@@ -1,0 +1,64 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "description": "ZakHarmony - Your Music Platform",
+    "backoffice": "BackOffice",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "language": "Language",
+    "switchLanguage": "Switch language to {{language}}",
+    "loading": "Loading..."
+  },
+  "metrics": {
+    "title": "System Metrics",
+    "realtime": "Real-time Metrics",
+    "system": {
+      "title": "System Metrics",
+      "apiResponseTime": "API Response Time",
+      "cpuUsage": "CPU Usage",
+      "memoryUsage": "Memory Usage",
+      "redisLatency": "Redis Latency",
+      "bandwidth": "Bandwidth"
+    },
+    "business": {
+      "title": "Business Metrics",
+      "streamCount": "Stream Count",
+      "activeUsers": "Active Users",
+      "storageUsed": "Storage Used",
+      "requestSuccessRate": "Request Success Rate",
+      "mediaProcessingTime": "Media Processing Time"
+    }
+  },
+  "kpiConfig": {
+    "title": "KPI Configuration",
+    "configure": "Configure KPIs",
+    "cancel": "Cancel",
+    "save": "Save",
+    "threshold": "Alert Threshold",
+    "notifyChannel": "Notification Channel",
+    "visualizationType": "Visualization Type",
+    "visualization": {
+      "counter": "Counter",
+      "gauge": "Gauge",
+      "chart": "Chart"
+    },
+    "alert": {
+      "title": "Alert Configuration - {label}",
+      "threshold": "Alert Threshold",
+      "notificationChannel": "Notification Channel"
+    },
+    "providers": {
+      "ntfy": "Notifications via ntfy.sh"
+    }
+  },
+  "login": {
+    "title": "ZakHarmony - Login",
+    "subtitle": "BackOffice Login",
+    "email": "Email address",
+    "password": "Password",
+    "submit": "Login",
+    "error": "Invalid credentials"
+  }
+}

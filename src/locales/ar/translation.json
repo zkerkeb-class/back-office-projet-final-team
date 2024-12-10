@@ -1,0 +1,64 @@
+{
+  "common": {
+    "welcome": "مرحباً",
+    "description": "ZakHarmony - منصتك الموسيقية",
+    "backoffice": "لوحة الإدارة",
+    "dashboard": "لوحة التحكم",
+    "settings": "الإعدادات",
+    "darkMode": "الوضع الداكن",
+    "lightMode": "الوضع الفاتح",
+    "language": "اللغة",
+    "switchLanguage": "تغيير اللغة إلى {{language}}",
+    "loading": "جاري التحميل..."
+  },
+  "metrics": {
+    "title": "مقاييس النظام",
+    "realtime": "المقاييس في الوقت الفعلي",
+    "system": {
+      "title": "مقاييس النظام",
+      "apiResponseTime": "وقت استجابة API",
+      "cpuUsage": "استخدام المعالج",
+      "memoryUsage": "استخدام الذاكرة",
+      "redisLatency": "زمن استجابة Redis",
+      "bandwidth": "عرض النطاق"
+    },
+    "business": {
+      "title": "مقاييس الأعمال",
+      "streamCount": "عدد البث",
+      "activeUsers": "المستخدمين النشطين",
+      "storageUsed": "التخزين المستخدم",
+      "requestSuccessRate": "معدل نجاح الطلبات",
+      "mediaProcessingTime": "وقت معالجة الوسائط"
+    }
+  },
+  "kpiConfig": {
+    "title": "إعدادات مؤشرات الأداء",
+    "configure": "تكوين المؤشرات",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "threshold": "حد التنبيه",
+    "notifyChannel": "قناة الإشعارات",
+    "visualizationType": "نوع العرض",
+    "visualization": {
+      "counter": "عداد",
+      "gauge": "مقياس",
+      "chart": "رسم بياني"
+    },
+    "alert": {
+      "title": "إعداد التنبيهات - {label}",
+      "threshold": "حد التنبيه",
+      "notificationChannel": "قناة الإشعارات"
+    },
+    "providers": {
+      "ntfy": "ntfy.sh الإشعارات عبر"
+    }
+  },
+  "login": {
+    "title": "ZakHarmony - تسجيل الدخول",
+    "subtitle": "تسجيل الدخول للوحة الإدارة",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "submit": "تسجيل الدخول",
+    "error": "بيانات غير صحيحة"
+  }
+}

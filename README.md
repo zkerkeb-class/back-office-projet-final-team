@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# TODO
 
-## Getting Started
+https://cours-react.notion.site/Partie-1-API-Backend-144858a1a0c3801fb25fd32ae9bae306
 
-First, run the development server:
+- [ ] Implémenter le tableau de bord avancé avec statistiques en temps réel
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+  - [x] Intégrer les métriques de performance système
+  - [x] Ajouter les métriques métier
+  - [x] Mettre en place l'actualisation en temps réel
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [ ] Ajouter l'interface de configuration des KPIs
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+  - [x] Permettre la sélection des KPIs à afficher
+  - [x] Implémenter la réorganisation par drag & drop
+  - [x] Définir des seuils d'alerte personnalisés
+  - [ ] Choisir le type de visualisation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [ ] Mettre en place le système de notifications pour les seuils d'alerte
 
-## Learn More
+  - [x] Intégrer ntfy.sh pour les notifications
+  - [x] Tester les notifications sur différents seuils
 
-To learn more about Next.js, take a look at the following resources:
+- [ ] Développer la fonctionnalité d'upload et conversion des médias
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  - [ ] Implémenter l'upload drag & drop multi-fichiers
+  - [ ] Supporter les formats audio et image
+  - [ ] Générer automatiquement plusieurs tailles d'images
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [ ] Intégrer la prévisualisation et le contrôle qualité des médias
 
-## Deploy on Vercel
+  - [ ] Ajouter la prévisualisation audio avec waveform
+  - [ ] Mettre en place la prévisualisation des formats d'image
+  - [ ] Valider les métadonnées
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [ ] Créer l'interface de gestion des artistes avec CRUD complet
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  - [ ] Implémenter la validation des données
+  - [ ] Ajouter la recherche phonétique
+  - [ ] Mettre en place le système de suggestion
+
+- [ ] Concevoir l'interface intuitive de gestion des albums
+
+  - [ ] Réorganisation drag & drop des pistes
+  - [ ] Gestion des métadonnées avancées
+  - [ ] Prévisualisation complète de l'album
+
+- [ ] Mettre en œuvre la recherche et le filtrage avancés
+
+  - [ ] Développer la recherche instantanée multi-critères
+  - [ ] Intégrer l'auto-complétion intelligente
+  - [ ] Historique des recherches
+
+- [ ] Optimiser les performances techniques
+
+  - [ ] Code splitting par route et fonctionnalité
+  - [ ] Lazy loading des composants lourds
+  - [ ] Mise en cache intelligente des requêtes
+
+- [ ] Intégrer le système RBAC pour la sécurité et le contrôle d'accès
+
+  - [ ] Développer l'interface d'administration des rôles
+  - [ ] Mettre en place la gestion fine des permissions
+  - [ ] Implémenter l'audit log des actions administrateurs
+
+- [ ] Assurer la sécurité renforcée avec protection CSRF et gestion des tokens
+
+  - [ ] Implémenter la protection CSRF
+  - [ ] Valider les données côté client
+  - [ ] Gérer les tokens de manière sécurisée
+
+- [ ] Ajouter le mode hors ligne et les thèmes Jour/Nuit
+- [ ] Internationaliser l'application (i18n) pour les données statiques
+- [ ] Garantir l'accessibilité WCAG AA
+- [ ] Effectuer un audit Lighthouse avec un score supérieur à 85
