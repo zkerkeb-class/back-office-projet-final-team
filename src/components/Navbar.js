@@ -20,6 +20,7 @@ export default function Navbar({ isDarkMode, toggleTheme }) {
     { path: '/', label: 'navigation.metrics' },
     { path: '/media', label: 'navigation.media' },
     { path: '/artists', label: 'navigation.artists' },
+    { path: '/albums', label: 'navigation.albums' },
   ];
 
   useEffect(() => {

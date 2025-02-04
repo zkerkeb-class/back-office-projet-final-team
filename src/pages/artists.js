@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
 import Head from 'next/head';
 import Navbar from '../components/Navbar';
 import Image from 'next/image';
@@ -8,41 +7,25 @@ import Image from 'next/image';
 export default function Artists() {
   const { t } = useTranslation();
   const [artists, setArtists] = useState([]);
-  const [selectedArtist, setSelectedArtist] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [selectedGenres, setSelectedGenres] = useState([]);
 
-  const VALID_GENRES = [
-    'pop',
-    'rock',
-    'jazz',
-    'classical',
-    'electronic',
-    'hip-hop',
-    'rnb',
-  ];
   const GENRE_DISPLAY_NAMES = {
-    pop: 'Pop',
     rock: 'Rock',
-    jazz: 'Jazz',
-    classical: 'Classical',
+    pop: 'Pop',
+    hip_hop: 'Hip Hop',
     electronic: 'Electronic',
-    'hip-hop': 'Hip-Hop',
+    classical: 'Classical',
+    jazz: 'Jazz',
+    blues: 'Blues',
+    country: 'Country',
     rnb: 'R&B',
+    reggae: 'Reggae',
   };
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
   };
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
 
   const fetchArtists = useCallback(async () => {
     try {
@@ -68,96 +51,6 @@ export default function Artists() {
   useEffect(() => {
     fetchArtists();
   }, [fetchArtists]);
-
-  useEffect(() => {
-    if (selectedArtist) {
-      setSelectedGenres(
-        typeof selectedArtist.genre === 'string'
-          ? selectedArtist.genre.split(', ').filter(Boolean)
-          : Array.isArray(selectedArtist.genre)
-            ? selectedArtist.genre
-            : [],
-      );
-    } else {
-      setSelectedGenres([]);
-    }
-  }, [selectedArtist]);
-
-  const handleGenreClick = (genre) => {
-    // S'assurer que le genre est valide avant de l'ajouter
-    if (!VALID_GENRES.includes(genre.toLowerCase())) {
-      alert(
-        `Genre invalide. Les genres valides sont: ${VALID_GENRES.join(', ')}`,
-      );
-      return;
-    }
-
-    setSelectedGenres((prev) => {
-      if (prev.includes(genre)) {
-        return prev.filter((g) => g !== genre);
-      } else {
-        return [genre];
-      }
-    });
-  };
-
-  const onSubmit = async (formData) => {
-    try {
-      const token = localStorage.getItem('token');
-
-      // Validation du genre
-      if (selectedGenres.length === 0) {
-        alert('Veuillez sélectionner au moins un genre');
-        return;
-      }
-
-      // Récupérer le genre sélectionné et vérifier qu'il est valide
-      const selectedGenre = selectedGenres[0];
-
-      // Vérifier si le genre est exactement dans la liste des genres valides
-      if (!VALID_GENRES.includes(selectedGenre)) {
-        alert(
-          `Genre invalide. Les genres valides sont: ${VALID_GENRES.join(', ')}`,
-        );
-        return;
-      }
-
-      // Construction des données de l'artiste
-      const artistData = {
-        name: formData.name.trim(),
-        genre: selectedGenre, // Utiliser le genre tel quel car il est déjà validé
-        country: formData.country?.trim() || '',
-        bio: formData.bio?.trim() || '',
-        image_url: formData.image_url?.trim() || '',
-        phonetic_title: formData.name.trim().toLowerCase(),
-      };
-
-      const url = selectedArtist
-        ? `${process.env.NEXT_PUBLIC_API_URL}/artists/${selectedArtist.id}`
-        : `${process.env.NEXT_PUBLIC_API_URL}/artists`;
-
-      const response = await fetch(url, {
-        method: selectedArtist ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(artistData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.text();
-        throw new Error(`Erreur lors de la sauvegarde: ${errorData}`);
-      }
-
-      await fetchArtists();
-      setIsModalOpen(false);
-      setSelectedArtist(null);
-      reset();
-    } catch (error) {
-      alert(error.message);
-    }
-  };
 
   const handleDelete = async (id) => {
     if (window.confirm(t('common.confirmDelete'))) {
@@ -259,9 +152,7 @@ export default function Artists() {
               </div>
               <button
                 onClick={() => {
-                  setIsModalOpen(true);
-                  setSelectedArtist(null);
-                  reset();
+                  // TODO: Implement create artist
                 }}
                 className="px-6 py-2 rounded-lg text-white bg-purple-600 hover:bg-purple-700 transition-all duration-200 shadow-lg"
               >
@@ -347,18 +238,7 @@ export default function Artists() {
                     <div className="flex gap-2">
                       <button
                         onClick={() => {
-                          setSelectedArtist(artist);
-                          setIsModalOpen(true);
-                          reset({
-                            name: artist.name,
-                            genre: artist.genre,
-                            country: artist.country,
-                            bio: artist.bio,
-                            image_url:
-                              typeof artist.image_url === 'string'
-                                ? artist.image_url
-                                : artist.image_url?.urls?.original?.png,
-                          });
+                          // TODO: Implement edit artist
                         }}
                         className={`p-2 rounded-lg transition-all duration-200 group ${
                           isDarkMode
@@ -412,141 +292,6 @@ export default function Artists() {
               </div>
             ))}
           </div>
-
-          {isModalOpen && (
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-              <div
-                className={`relative w-full max-w-2xl p-8 rounded-2xl shadow-2xl transform transition-all duration-200 ${
-                  isDarkMode ? 'bg-[#1a1a1a]' : 'bg-white'
-                }`}
-              >
-                <h2
-                  className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                >
-                  {selectedArtist ? t('artists.edit') : t('artists.add')}
-                </h2>
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                  <div>
-                    <label className="block mb-2 font-medium">
-                      {t('artists.fields.name')}
-                    </label>
-                    <input
-                      {...register('name', {
-                        required: t('artists.validation.nameRequired'),
-                      })}
-                      className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 ${
-                        isDarkMode
-                          ? 'bg-[#1a1a1a] border-gray-700'
-                          : 'bg-white border-gray-300'
-                      }`}
-                    />
-                    {errors.name && (
-                      <span className="text-red-500 text-sm mt-1">
-                        {errors.name.message}
-                      </span>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block mb-2 font-medium">
-                      {t('artists.fields.genre')}
-                    </label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                      {VALID_GENRES.map((genre) => (
-                        <button
-                          key={genre}
-                          type="button"
-                          onClick={() => handleGenreClick(genre)}
-                          className={`p-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                            selectedGenres.includes(genre)
-                              ? isDarkMode
-                                ? 'bg-purple-600 text-white'
-                                : 'bg-purple-600 text-white'
-                              : isDarkMode
-                                ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                          }`}
-                        >
-                          {GENRE_DISPLAY_NAMES[genre] ||
-                            genre.charAt(0).toUpperCase() + genre.slice(1)}
-                        </button>
-                      ))}
-                    </div>
-                    {selectedGenres.length === 0 && (
-                      <span className="text-red-500 text-sm mt-1">
-                        {t('artists.validation.genreRequired')}
-                      </span>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block mb-2 font-medium">
-                      {t('artists.fields.country')}
-                    </label>
-                    <input
-                      {...register('country')}
-                      className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 ${
-                        isDarkMode
-                          ? 'bg-[#1a1a1a] border-gray-700'
-                          : 'bg-white border-gray-300'
-                      }`}
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block mb-2 font-medium">Bio</label>
-                    <textarea
-                      {...register('bio')}
-                      className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 ${
-                        isDarkMode
-                          ? 'bg-[#1a1a1a] border-gray-700'
-                          : 'bg-white border-gray-300'
-                      }`}
-                      rows="4"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block mb-2 font-medium">Image URL</label>
-                    <input
-                      {...register('image_url')}
-                      className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 ${
-                        isDarkMode
-                          ? 'bg-[#1a1a1a] border-gray-700'
-                          : 'bg-white border-gray-300'
-                      }`}
-                      type="url"
-                      placeholder="https://example.com/image.jpg"
-                    />
-                  </div>
-
-                  <div className="flex justify-end space-x-4 mt-8">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsModalOpen(false);
-                        setSelectedArtist(null);
-                        reset();
-                      }}
-                      className={`px-6 py-2 rounded-lg border transition-all duration-200 ${
-                        isDarkMode
-                          ? 'border-gray-600 hover:bg-gray-700'
-                          : 'border-gray-300 hover:bg-gray-100'
-                      }`}
-                    >
-                      {t('common.cancel')}
-                    </button>
-                    <button
-                      type="submit"
-                      className="px-6 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition-all duration-200"
-                    >
-                      {t('common.save')}
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </>

@@ -14,7 +14,8 @@
   "navigation": {
     "metrics": "Métriques",
     "media": "Médias",
-    "artists": "Artistes"
+    "artists": "Artistes",
+    "albums": "Albums"
   },
   "media": {
     "dragAndDrop": "Glissez-déposez un fichier ou cliquez pour sélectionner",
@@ -165,6 +166,29 @@
       "foundationYear": "Année de formation",
       "socialLinks": "Liens sociaux",
       "metadata": "Métadonnées"
+    }
+  },
+  "albums": {
+    "title": "Gestion des Albums",
+    "add": "Ajouter un album",
+    "edit": "Modifier l'album",
+    "delete": "Supprimer l'album",
+    "tracks": "Pistes",
+    "search": "Rechercher un album",
+    "metadata": {
+      "title": "Titre",
+      "artist": "Artiste",
+      "releaseYear": "Année de sortie",
+      "genre": "Genre",
+      "duration": "Durée totale"
+    },
+    "dragAndDrop": "Glissez-déposez pour réorganiser les pistes",
+    "preview": "Prévisualisation de l'album",
+    "validation": {
+      "titleRequired": "Le titre est requis",
+      "artistRequired": "L'artiste est requis",
+      "yearRequired": "L'année de sortie est requise",
+      "tracksRequired": "Au moins une piste est requise"
     }
   }
 }

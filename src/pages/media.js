@@ -723,7 +723,7 @@ export default function Media() {
                           <p
                             className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
                           >
-                            MP3, WAV jusqu&aposà 10MB
+                            MP3, WAV jusqu&apos;à 10MB
                           </p>
                         </>
                       )}
