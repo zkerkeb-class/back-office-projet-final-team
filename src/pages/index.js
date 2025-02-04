@@ -25,7 +25,6 @@ const KPIConfig = dynamic(() => import('@/components/KPIConfig'), {
 export default function Home() {
   const { t } = useTranslation();
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const setIsModalOpen = useState(false);
   const [systemMetrics, setSystemMetrics] = useState({
     apiResponseTime: 0,
     cpuUsage: 0,
@@ -297,14 +296,6 @@ export default function Home() {
             >
               {t('common.welcome')}
             </h1>
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="px-6 py-2 rounded-lg text-white bg-purple-600 hover:bg-purple-700 transition-all duration-200 shadow-lg"
-              >
-                {t('common.configure')}
-              </button>
-            </div>
           </div>
 
           <main

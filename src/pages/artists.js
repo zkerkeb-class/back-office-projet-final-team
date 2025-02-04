@@ -289,6 +289,8 @@ export default function Artists() {
                           'https://placehold.co/300x300/png'
                     }
                     alt={artist.name}
+                    width={300}
+                    height={300}
                     className="w-full h-full object-cover transition-transform duration-200"
                     onError={(e) => {
                       if (!e.target.hasAttribute('data-error')) {

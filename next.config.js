@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  images: {
+    domains: ['d3cqeg6fl6kah.cloudfront.net', 'placehold.co'],
+  },
   webpack: (config) => {
     config.module.rules.push({
       test: /\.worker\.js$/,
