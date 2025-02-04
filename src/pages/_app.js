@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import initI18next from '../i18n';
 import '../pages/globals.css';
+import ProtectedRoute from '../components/ProtectedRoute';
 
 function MyApp({ Component, pageProps }) {
   const [i18nInitialized, setI18nInitialized] = useState(false);
@@ -14,10 +15,20 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   if (!i18nInitialized) {
-    return null; // ou un loader si vous préférez
+    return null;
   }
 
-  return <Component {...pageProps} />;
+  // Liste des routes qui ne nécessitent pas d'authentification
+  const publicRoutes = ['/auth/login'];
+  const isPublicRoute = publicRoutes.includes(Component.route);
+
+  return isPublicRoute ? (
+    <Component {...pageProps} />
+  ) : (
+    <ProtectedRoute>
+      <Component {...pageProps} />
+    </ProtectedRoute>
+  );
 }
 
 export default MyApp;

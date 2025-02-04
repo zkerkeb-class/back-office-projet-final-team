@@ -27,8 +27,9 @@ const initI18next = async () => {
         escapeValue: false,
       },
       detection: {
-        order: ['cookie', 'localStorage', 'navigator'],
-        caches: ['cookie'],
+        order: ['localStorage', 'cookie', 'navigator'],
+        lookupLocalStorage: 'i18nextLng',
+        caches: ['localStorage', 'cookie'],
       },
     });
 

@@ -25,7 +25,7 @@ const formatMetricValue = (value, metricId) => {
     case 'mediaProcessingTime':
       return `${value.toFixed(1)} s`;
     case 'storageUsed':
-      return `${value} GB`;
+      return `${(value / 1024 / 1024 / 1024).toFixed(2)} GB`;
     default:
       return value.toLocaleString();
   }
@@ -114,7 +114,7 @@ export default function MetricCard({
       default:
         return (
           <span
-            className={`font-semibold text-lg ${isDarkMode ? 'text-[#a78bfa]' : 'text-[#a78bfa]'}`}
+            className={`font-semibold text-lg ${isDarkMode ? 'text-purple-600' : 'text-purple-600'}`}
           >
             {formattedValue}
           </span>
@@ -128,7 +128,7 @@ export default function MetricCard({
         isDarkMode ? 'bg-[#1a1a1a]' : 'bg-white'
       } rounded-xl shadow-xl overflow-hidden transition-all duration-300`}
     >
-      <div className="bg-[#a78bfa] px-8 py-6">
+      <div className="bg-purple-600 px-8 py-6">
         <h2 className="text-2xl font-semibold text-white tracking-tight">
           {t(`metrics.${category}.title`)}
         </h2>

@@ -1,19 +1,79 @@
 {
   "common": {
     "welcome": "مرحباً",
-    "description": "ZakHarmony - منصتك الموسيقية",
-    "backoffice": "لوحة الإدارة",
-    "dashboard": "لوحة التحكم",
-    "settings": "الإعدادات",
+    "description": "وصف المشروع",
+    "backoffice": "لوحة التحكم",
+    "loading": "جاري التحميل...",
     "darkMode": "الوضع الداكن",
     "lightMode": "الوضع الفاتح",
-    "language": "اللغة",
-    "switchLanguage": "تغيير اللغة إلى {{language}}",
-    "loading": "جاري التحميل..."
+    "language": "اللغة"
+  },
+  "navigation": {
+    "metrics": "المقاييس",
+    "media": "الوسائط"
+  },
+  "media": {
+    "dragAndDrop": "اسحب وأفلت ملفًا أو انقر للتحديد",
+    "dropHere": "أفلت الملفات هنا...",
+    "supportedFormats": "الصيغ المدعومة: صور (.jpg, .png, .webp, .avif)، صوت (.mp3, .wav, .m4a)",
+    "files": "الملفات",
+    "upload": "رفع",
+    "uploading": "جاري الرفع",
+    "converting": "جاري التحويل",
+    "optimizing": "جاري التحسين",
+    "finalizing": "جاري الإنهاء",
+    "preparing": "جاري التحضير...",
+    "ready": "جاهز",
+    "processed": "تمت المعالجة في",
+    "remaining": "متبقي",
+    "audioNotSupported": "متصفحك لا يدعم تشغيل الصوت.",
+    "availableSizes": "الأحجام المتاحة",
+    "thumbnail": "مصغرة",
+    "medium": "متوسط",
+    "large": "كبير",
+    "downloadOriginal": "تحميل الأصلي",
+    "downloadConverted": "تحميل بصيغة",
+    "previewNotAvailable": "المعاينة غير متاحة",
+    "conversionError": "خطأ في التحويل",
+    "retryConversion": "إعادة محاولة التحويل",
+    "metadata": {
+      "title": "البيانات الوصفية",
+      "filename": "اسم الملف",
+      "filesize": "حجم الملف",
+      "dimensions": "الأبعاد",
+      "duration": "المدة",
+      "format": "الصيغة",
+      "bitrate": "معدل البت",
+      "sampleRate": "معدل العينات",
+      "channels": "القنوات"
+    },
+    "addTrack": "إضافة مقطع",
+    "title": "العنوان",
+    "releaseYear": "سنة الإصدار",
+    "genres": "الأنواع",
+    "multipleSelect": "اضغط Ctrl (Cmd على Mac) لتحديد عدة أنواع",
+    "cover": "الغلاف",
+    "audio": "الصوت",
+    "validation": {
+      "title": "يرجى تصحيح الأخطاء التالية:",
+      "titleRequired": "يجب أن يحتوي العنوان على حرفين على الأقل",
+      "yearInvalid": "سنة الإصدار غير صالحة",
+      "genreRequired": "يرجى اختيار نوع واحد على الأقل",
+      "coverRequired": "صورة الغلاف مطلوبة",
+      "audioRequired": "ملف الصوت مطلوب"
+    },
+    "error": {
+      "title": "خطأ",
+      "uploadFailed": "فشل الرفع",
+      "retryAttempt": "المحاولة {{count}}/{{max}}",
+      "maxRetries": "تم الوصول إلى الحد الأقصى للمحاولات ({{max}}): {{message}}",
+      "unsupportedImage": "تنسيق الصورة غير مدعوم",
+      "imageTooLarge": "يجب ألا يتجاوز حجم الصورة 5 ميجابايت"
+    }
   },
   "metrics": {
-    "title": "مقاييس النظام",
-    "realtime": "المقاييس في الوقت الفعلي",
+    "title": "المقاييس",
+    "realtime": "رسم بياني حقيقي الزمن",
     "system": {
       "title": "مقاييس النظام",
       "apiResponseTime": "وقت استجابة API",
@@ -27,16 +87,17 @@
       "streamCount": "عدد البث",
       "activeUsers": "المستخدمين النشطين",
       "storageUsed": "التخزين المستخدم",
-      "requestSuccessRate": "معدل نجاح الطلبات",
-      "mediaProcessingTime": "وقت معالجة الوسائط"
+      "requestSuccessRate": "معدل النجاح",
+      "mediaProcessingTime": "وقت المعالجة"
     }
   },
   "kpiConfig": {
-    "title": "إعدادات مؤشرات الأداء",
-    "configure": "تكوين المؤشرات",
-    "cancel": "إلغاء",
-    "save": "حفظ",
-    "threshold": "حد التنبيه",
+    "configure": "تكوين",
+    "title": "إعداد مؤشرات الأداء",
+    "alert": {
+      "title": "إعداد التنبيهات"
+    },
+    "threshold": "الحد",
     "notifyChannel": "قناة الإشعارات",
     "visualizationType": "نوع العرض",
     "visualization": {
@@ -44,21 +105,24 @@
       "gauge": "مقياس",
       "chart": "رسم بياني"
     },
-    "alert": {
-      "title": "إعداد التنبيهات",
-      "threshold": "حد التنبيه",
-      "notificationChannel": "قناة الإشعارات"
-    },
     "providers": {
-      "ntfy": "ntfy.sh الإشعارات عبر"
-    }
+      "ntfy": "Ntfy.sh"
+    },
+    "save": "حفظ",
+    "cancel": "إلغاء"
   },
-  "login": {
-    "title": "ZakHarmony - تسجيل الدخول",
-    "subtitle": "تسجيل الدخول للوحة الإدارة",
-    "email": "البريد الإلكتروني",
+  "auth": {
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "loggingIn": "جاري تسجيل الدخول...",
     "password": "كلمة المرور",
-    "submit": "تسجيل الدخول",
-    "error": "بيانات غير صحيحة"
+    "email": "البريد الإلكتروني"
+  },
+  "validation": {
+    "titleLength": "يجب أن يحتوي العنوان على حرفين على الأقل",
+    "selectGenre": "الرجاء اختيار نوع واحد على الأقل",
+    "yearRange": "يجب أن تكون السنة بين 1900 والسنة الحالية",
+    "coverRequired": "صورة الغلاف مطلوبة",
+    "audioRequired": "ملف الصوت مطلوب"
   }
 }

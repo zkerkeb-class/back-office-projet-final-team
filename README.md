@@ -1,6 +1,6 @@
 # TODO
 
-https://cours-react.notion.site/Partie-1-API-Backend-144858a1a0c3801fb25fd32ae9bae306
+https://cours-react.notion.site/Partie-2-Backoffice-144858a1a0c38035b44dd830a8e3768f
 
 - [x] Implémenter le tableau de bord avancé avec statistiques en temps réel
 
@@ -20,21 +20,21 @@ https://cours-react.notion.site/Partie-1-API-Backend-144858a1a0c3801fb25fd32ae9b
   - [x] Intégrer ntfy.sh pour les notifications
   - [x] Tester les notifications sur différents seuils
 
-- [ ] Développer la fonctionnalité d'upload et conversion des médias
+- [x] Développer la fonctionnalité d'upload et conversion des médias
 
-  - [ ] Implémenter l'upload drag & drop multi-fichiers
-  - [ ] Supporter les formats audio et image
-  - [ ] Générer automatiquement plusieurs tailles d'images
+  - [x] Implémenter l'upload drag & drop multi-fichiers
+  - [x] Supporter les formats audio et image
+  - [x] Générer automatiquement plusieurs tailles d'images
 
-- [ ] Intégrer la prévisualisation et le contrôle qualité des médias
+- [x] Intégrer la prévisualisation et le contrôle qualité des médias
 
-  - [ ] Ajouter la prévisualisation audio avec waveform
-  - [ ] Mettre en place la prévisualisation des formats d'image
-  - [ ] Valider les métadonnées
+  - [x] Ajouter la prévisualisation audio avec waveform
+  - [x] Mettre en place la prévisualisation des formats d'image
+  - [x] Valider les métadonnées
 
 - [ ] Créer l'interface de gestion des artistes avec CRUD complet
 
-  - [ ] Implémenter la validation des données
+  - [x] Implémenter la validation des données
   - [ ] Ajouter la recherche phonétique
   - [ ] Mettre en place le système de suggestion
 
@@ -68,7 +68,7 @@ https://cours-react.notion.site/Partie-1-API-Backend-144858a1a0c3801fb25fd32ae9b
   - [ ] Valider les données côté client
   - [ ] Gérer les tokens de manière sécurisée
 
-- [ ] Ajouter le mode hors ligne et les thèmes Jour/Nuit
-- [ ] Internationaliser l'application (i18n) pour les données statiques
+- [x] Ajouter le mode hors ligne et les thèmes Jour/Nuit
+- [x] Internationaliser l'application (i18n) pour les données statiques
 - [ ] Garantir l'accessibilité WCAG AA
-- [ ] Effectuer un audit Lighthouse avec un score supérieur à 85
+- [x] Effectuer un audit Lighthouse avec un score supérieur à 85

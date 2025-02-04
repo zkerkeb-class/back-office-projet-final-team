@@ -1,42 +1,115 @@
 {
   "common": {
     "welcome": "Bienvenue",
-    "description": "ZakHarmony - Votre Plateforme Musicale",
-    "backoffice": "BackOffice",
-    "dashboard": "Tableau de bord",
-    "settings": "Paramètres",
+    "description": "Description du projet",
+    "backoffice": "Back Office",
+    "loading": "Chargement...",
     "darkMode": "Mode sombre",
     "lightMode": "Mode clair",
     "language": "Langue",
-    "switchLanguage": "Changer la langue en {{language}}",
-    "loading": "Chargement..."
+    "save": "Sauvegarder",
+    "cancel": "Annuler",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet élément ?"
+  },
+  "navigation": {
+    "metrics": "Métriques",
+    "media": "Médias",
+    "artists": "Artistes"
+  },
+  "media": {
+    "dragAndDrop": "Glissez-déposez un fichier ou cliquez pour sélectionner",
+    "dropHere": "Déposez les fichiers ici...",
+    "supportedFormats": "Formats supportés : Images (.jpg, .png, .webp, .avif), Audio (.mp3, .wav, .m4a)",
+    "files": "Fichiers",
+    "upload": "Téléverser",
+    "uploading": "Téléversement en cours...",
+    "converting": "Conversion en cours",
+    "optimizing": "Optimisation",
+    "finalizing": "Finalisation",
+    "preparing": "Préparation...",
+    "ready": "Prêt",
+    "processed": "Traité en",
+    "remaining": "restant",
+    "audioNotSupported": "Votre navigateur ne supporte pas la lecture audio.",
+    "availableSizes": "Tailles disponibles",
+    "thumbnail": "Miniature",
+    "medium": "Moyenne",
+    "large": "Grande",
+    "downloadOriginal": "Télécharger l'original",
+    "downloadConverted": "Télécharger en",
+    "previewNotAvailable": "Prévisualisation non disponible",
+    "conversionError": "Erreur lors de la conversion",
+    "retryConversion": "Réessayer la conversion",
+    "metadata": {
+      "title": "Métadonnées",
+      "filename": "Nom du fichier",
+      "filesize": "Taille",
+      "dimensions": "Dimensions",
+      "duration": "Durée",
+      "format": "Format",
+      "bitrate": "Débit",
+      "sampleRate": "Taux d'échantillonnage",
+      "channels": "Canaux"
+    },
+    "addTrack": "Ajouter un titre",
+    "title": "Titre",
+    "releaseYear": "Année de sortie",
+    "genres": "Genres",
+    "multipleSelect": "Appuyez sur Ctrl (Cmd sur Mac) pour sélectionner plusieurs genres",
+    "cover": "Pochette",
+    "audio": "Fichier audio",
+    "uploading": "Envoi en cours...",
+    "upload": "Envoyer",
+    "validation": {
+      "title": "Veuillez corriger les erreurs suivantes :",
+      "titleRequired": "Le titre doit contenir au moins 2 caractères",
+      "yearInvalid": "L'année de sortie n'est pas valide",
+      "genreRequired": "Sélectionnez au moins un genre",
+      "coverRequired": "Une image de couverture est requise",
+      "audioRequired": "Un fichier audio est requis"
+    },
+    "error": {
+      "title": "Erreur",
+      "uploadFailed": "Une erreur est survenue lors de l'upload",
+      "retryAttempt": "Erreur lors de l'upload. Tentative {count}/{max}...",
+      "maxRetries": "Erreur lors de l'upload après {max} tentatives: {message}",
+      "unsupportedImage": "Format d'image non supporté",
+      "imageTooLarge": "L'image ne doit pas dépasser 5MB"
+    }
   },
   "metrics": {
-    "title": "Métriques Système",
-    "realtime": "Métriques en temps réel",
+    "title": "Métriques",
+    "realtime": "Graphique en temps réel",
     "system": {
       "title": "Métriques Système",
-      "apiResponseTime": "Temps de réponse API",
       "cpuUsage": "Utilisation CPU",
       "memoryUsage": "Utilisation Mémoire",
+      "apiResponseTime": "Temps de réponse API",
       "redisLatency": "Latence Redis",
-      "bandwidth": "Bande passante"
+      "bandwidth": "Bande Passante",
+      "storageUsed": "Espace Utilisé",
+      "storageFree": "Espace Libre",
+      "storageTotal": "Espace Total"
     },
     "business": {
-      "title": "Métriques Métier",
-      "streamCount": "Nombre de streams",
-      "activeUsers": "Utilisateurs actifs",
-      "storageUsed": "Stockage utilisé",
-      "requestSuccessRate": "Taux de succès des requêtes",
-      "mediaProcessingTime": "Temps de traitement média"
+      "title": "Métriques Business",
+      "streamCount": "Streams Actifs",
+      "activeUsers": "Utilisateurs Actifs",
+      "totalUsers": "Total Utilisateurs",
+      "requestSuccessRate": "Taux de Succès",
+      "mediaProcessingTime": "Temps de Traitement",
+      "queueSize": "File d'Attente",
+      "totalRequests": "Total Requêtes",
+      "errorCount": "Nombre d'Erreurs"
     }
   },
   "kpiConfig": {
+    "configure": "Configurer",
     "title": "Configuration des KPIs",
-    "configure": "Configurer les KPIs",
-    "cancel": "Annuler",
-    "save": "Enregistrer",
-    "threshold": "Seuil d'alerte",
+    "alert": {
+      "title": "Configuration des alertes"
+    },
+    "threshold": "Seuil",
     "notifyChannel": "Canal de notification",
     "visualizationType": "Type de visualisation",
     "visualization": {
@@ -44,21 +117,54 @@
       "gauge": "Jauge",
       "chart": "Graphique"
     },
-    "alert": {
-      "title": "Configuration des alertes",
-      "threshold": "Seuil d'alerte",
-      "notificationChannel": "Canal de notification"
-    },
     "providers": {
-      "ntfy": "Notifications via ntfy.sh"
-    }
+      "ntfy": "Ntfy.sh"
+    },
+    "save": "Sauvegarder",
+    "cancel": "Annuler"
   },
-  "login": {
-    "title": "ZakHarmony - Connexion",
-    "subtitle": "Connexion BackOffice",
-    "email": "Adresse email",
+  "auth": {
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "loggingIn": "Connexion en cours...",
     "password": "Mot de passe",
-    "submit": "Se connecter",
-    "error": "Identifiants invalides"
+    "email": "Email"
+  },
+  "validation": {
+    "titleLength": "Le titre doit contenir au moins 2 caractères",
+    "selectGenre": "Sélectionnez au moins un genre",
+    "yearRange": "L'année doit être comprise entre 1900 et l'année en cours",
+    "coverRequired": "Une image de pochette est requise",
+    "audioRequired": "Un fichier audio est requis"
+  },
+  "error": {
+    "uploadFailed": "L'upload a échoué",
+    "retryAttempt": "Tentative {{count}}/{{max}}",
+    "maxRetries": "Nombre maximum de tentatives atteint ({{max}}): {{message}}",
+    "unsupportedImage": "Format d'image non supporté",
+    "imageTooLarge": "L'image ne doit pas dépasser 5MB"
+  },
+  "artists": {
+    "title": "Gestion des Artistes",
+    "add": "Ajouter un artiste",
+    "edit": "Modifier l'artiste",
+    "delete": "Supprimer l'artiste",
+    "search": "Rechercher un artiste",
+    "similar": "Artistes similaires",
+    "metadata": "Métadonnées",
+    "validation": {
+      "nameRequired": "Le nom de l'artiste est requis",
+      "descriptionRequired": "La description est requise",
+      "genreRequired": "Le genre est requis"
+    },
+    "fields": {
+      "name": "Nom",
+      "description": "Description",
+      "genre": "Genre",
+      "country": "Pays",
+      "foundationYear": "Année de formation",
+      "socialLinks": "Liens sociaux",
+      "metadata": "Métadonnées"
+    }
   }
 }
