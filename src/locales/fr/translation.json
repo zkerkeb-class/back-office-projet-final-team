@@ -9,7 +9,13 @@
     "language": "Langue",
     "save": "Sauvegarder",
     "cancel": "Annuler",
-    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet élément ?"
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet élément ?",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "select": "Sélectionner",
+    "error": {
+      "unexpected": "Une erreur inattendue s'est produite"
+    }
   },
   "navigation": {
     "metrics": "Métriques",
@@ -153,10 +159,12 @@
     "search": "Rechercher un artiste",
     "similar": "Artistes similaires",
     "metadata": "Métadonnées",
+    "listeners": "auditeurs",
     "validation": {
       "nameRequired": "Le nom de l'artiste est requis",
       "descriptionRequired": "La description est requise",
-      "genreRequired": "Le genre est requis"
+      "genreRequired": "Le genre est requis",
+      "countryLength": "Le pays doit contenir au moins 2 caractères"
     },
     "fields": {
       "name": "Nom",
@@ -166,6 +174,13 @@
       "foundationYear": "Année de formation",
       "socialLinks": "Liens sociaux",
       "metadata": "Métadonnées"
+    },
+    "errors": {
+      "fetchFailed": "Erreur lors de la récupération des artistes",
+      "createFailed": "Erreur lors de la création de l'artiste",
+      "updateFailed": "Erreur lors de la modification de l'artiste",
+      "deleteFailed": "Erreur lors de la suppression de l'artiste",
+      "searchFailed": "Erreur lors de la recherche des artistes"
     }
   },
   "albums": {

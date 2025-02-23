@@ -3,12 +3,17 @@ import { useTranslation } from 'react-i18next';
 import Head from 'next/head';
 import Navbar from '../components/Navbar';
 import Image from 'next/image';
+import Modal from '../components/Modal';
+import ArtistForm from '../components/ArtistForm';
 
 export default function Artists() {
   const { t } = useTranslation();
   const [artists, setArtists] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedArtist, setSelectedArtist] = useState(null);
 
   const GENRE_DISPLAY_NAMES = {
     rock: 'Rock',
@@ -71,10 +76,10 @@ export default function Artists() {
         if (response.ok) {
           await fetchArtists();
         } else {
-          // Ignore error on delete
+          throw new Error('Failed to delete artist');
         }
       } catch (error) {
-        // Ignore error on delete
+        alert(t('artists.errors.deleteFailed', { error: error.message }));
       }
     }
   };
@@ -97,11 +102,67 @@ export default function Artists() {
         const data = await response.json();
         setArtists(data);
       } catch (error) {
-        // Ignore search errors
+        alert(t('artists.errors.searchFailed', { error: error.message }));
       }
     } else if (query.length === 0) {
       fetchArtists();
     }
+  };
+
+  const handleCreateSubmit = async (formData) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/artists`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to create artist');
+      }
+
+      await fetchArtists();
+      setIsCreateModalOpen(false);
+    } catch (error) {
+      alert(t('artists.errors.createFailed', { error: error.message }));
+    }
+  };
+
+  const handleEditSubmit = async (formData) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/artists/${selectedArtist.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to update artist');
+      }
+
+      await fetchArtists();
+      setIsEditModalOpen(false);
+      setSelectedArtist(null);
+    } catch (error) {
+      alert(t('artists.errors.updateFailed', { error: error.message }));
+    }
+  };
+
+  const handleEdit = (artist) => {
+    setSelectedArtist(artist);
+    setIsEditModalOpen(true);
   };
 
   return (
@@ -151,9 +212,7 @@ export default function Artists() {
                 </div>
               </div>
               <button
-                onClick={() => {
-                  // TODO: Implement create artist
-                }}
+                onClick={() => setIsCreateModalOpen(true)}
                 className="px-6 py-2 rounded-lg text-white bg-purple-600 hover:bg-purple-700 transition-all duration-200 shadow-lg"
               >
                 {t('artists.add')}
@@ -237,9 +296,7 @@ export default function Artists() {
                     </span>
                     <div className="flex gap-2">
                       <button
-                        onClick={() => {
-                          // TODO: Implement edit artist
-                        }}
+                        onClick={() => handleEdit(artist)}
                         className={`p-2 rounded-lg transition-all duration-200 group ${
                           isDarkMode
                             ? 'bg-gray-800 hover:bg-purple-600'
@@ -294,6 +351,31 @@ export default function Artists() {
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        title={t('artists.add')}
+        isDarkMode={isDarkMode}
+      >
+        <ArtistForm onSubmit={handleCreateSubmit} isDarkMode={isDarkMode} />
+      </Modal>
+
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSelectedArtist(null);
+        }}
+        title={t('artists.edit')}
+        isDarkMode={isDarkMode}
+      >
+        <ArtistForm
+          artist={selectedArtist}
+          onSubmit={handleEditSubmit}
+          isDarkMode={isDarkMode}
+        />
+      </Modal>
     </>
   );
 }

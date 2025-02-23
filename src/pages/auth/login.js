@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import AuthService from '../../services/auth.service';
+import { useTranslation } from 'react-i18next';
 
 export default function Login() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -25,15 +28,17 @@ export default function Login() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(formData),
+          credentials: 'include', // Pour gérer les cookies httpOnly
         },
       );
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || 'Erreur de connexion');
+        throw new Error(data.message || t('auth.errors.loginFailed'));
       }
 
-      localStorage.setItem('token', data.accessToken);
+      // Utilisation du service d'authentification pour stocker les tokens
+      AuthService.setTokens(data.accessToken, data.refreshToken);
       router.push('/');
     } catch (err) {
       setError(err.message);
@@ -53,12 +58,12 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#121212] flex flex-col justify-center">
       <Head>
-        <title>Login - Backoffice</title>
+        <title>{t('auth.login')} - Backoffice</title>
       </Head>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-          Login
+          {t('auth.login')}
         </h2>
       </div>
 
@@ -70,7 +75,7 @@ export default function Login() {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700 dark:text-gray-200"
               >
-                Email
+                {t('auth.email')}
               </label>
               <div className="mt-1">
                 <input
@@ -91,7 +96,7 @@ export default function Login() {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700 dark:text-gray-200"
               >
-                Password
+                {t('auth.password')}
               </label>
               <div className="mt-1">
                 <input
@@ -121,7 +126,7 @@ export default function Login() {
                     : 'bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2'
                 }`}
               >
-                {isLoading ? 'Logging in...' : 'Login'}
+                {isLoading ? t('auth.loggingIn') : t('auth.login')}
               </button>
             </div>
           </form>

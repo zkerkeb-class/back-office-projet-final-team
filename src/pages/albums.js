@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Navbar from '../components/Navbar';
+import Modal from '../components/Modal';
+import AlbumForm from '../components/AlbumForm';
 
 export default function Albums() {
   const { t } = useTranslation();
@@ -19,6 +21,22 @@ export default function Albums() {
     totalItems: 0,
     totalPages: 0,
   });
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedAlbum, setSelectedAlbum] = useState(null);
+
+  const GENRE_DISPLAY_NAMES = {
+    rock: 'Rock',
+    pop: 'Pop',
+    hip_hop: 'Hip Hop',
+    electronic: 'Electronic',
+    classical: 'Classical',
+    jazz: 'Jazz',
+    blues: 'Blues',
+    country: 'Country',
+    rnb: 'R&B',
+    reggae: 'Reggae',
+  };
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -87,6 +105,89 @@ export default function Albums() {
     fetchAlbums(newPage);
   };
 
+  const handleDelete = async (id) => {
+    if (window.confirm(t('common.confirmDelete'))) {
+      try {
+        const token = localStorage.getItem('token');
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/albums/${id}`,
+          {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        if (response.ok) {
+          await fetchAlbums(page);
+        } else {
+          throw new Error('Failed to delete album');
+        }
+      } catch (error) {
+        alert(t('albums.errors.deleteFailed', { error: error.message }));
+      }
+    }
+  };
+
+  const handleCreateSubmit = async (formData) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/albums`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to create album');
+      }
+
+      await fetchAlbums(page);
+      setIsCreateModalOpen(false);
+    } catch (error) {
+      alert(t('albums.errors.createFailed', { error: error.message }));
+    }
+  };
+
+  const handleEditSubmit = async (formData) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/albums/${selectedAlbum.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to update album');
+      }
+
+      await fetchAlbums(page);
+      setIsEditModalOpen(false);
+      setSelectedAlbum(null);
+    } catch (error) {
+      alert(t('albums.errors.updateFailed', { error: error.message }));
+    }
+  };
+
+  const handleEdit = (album) => {
+    setSelectedAlbum(album);
+    setIsEditModalOpen(true);
+  };
+
   if (loading) {
     return (
       <div
@@ -150,6 +251,12 @@ export default function Albums() {
                   </svg>
                 </span>
               </div>
+              <button
+                onClick={() => setIsCreateModalOpen(true)}
+                className="px-6 py-2 rounded-lg text-white bg-purple-600 hover:bg-purple-700 transition-all duration-200 shadow-lg"
+              >
+                {t('albums.add')}
+              </button>
             </div>
           </div>
 
@@ -206,7 +313,8 @@ export default function Albums() {
                         key={idx}
                         className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-200"
                       >
-                        {genre}
+                        {GENRE_DISPLAY_NAMES[genre] ||
+                          genre.charAt(0).toUpperCase() + genre.slice(1)}
                       </span>
                     ))}
                   </div>
@@ -216,6 +324,59 @@ export default function Albums() {
                   >
                     <p>{new Date(album.release_date).getFullYear()}</p>
                     <p>{t('albums.tracks', { count: album.total_tracks })}</p>
+                  </div>
+                </div>
+
+                <div className="absolute inset-0 flex items-end justify-between p-4">
+                  <div className="flex justify-end gap-2">
+                    <button
+                      onClick={() => handleEdit(album)}
+                      className={`p-2 rounded-lg transition-all duration-200 group ${
+                        isDarkMode
+                          ? 'bg-gray-800 hover:bg-purple-600'
+                          : 'bg-gray-100 hover:bg-purple-600 hover:text-white'
+                      }`}
+                      title={t('common.edit')}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => handleDelete(album.id)}
+                      className={`p-2 rounded-lg transition-all duration-200 group ${
+                        isDarkMode
+                          ? 'bg-gray-800 hover:bg-red-600'
+                          : 'bg-gray-100 hover:bg-red-600 hover:text-white'
+                      }`}
+                      title={t('common.delete')}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -299,6 +460,31 @@ export default function Albums() {
           )}
         </main>
       </div>
+
+      <Modal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        title={t('albums.add')}
+        isDarkMode={isDarkMode}
+      >
+        <AlbumForm onSubmit={handleCreateSubmit} isDarkMode={isDarkMode} />
+      </Modal>
+
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSelectedAlbum(null);
+        }}
+        title={t('albums.edit')}
+        isDarkMode={isDarkMode}
+      >
+        <AlbumForm
+          album={selectedAlbum}
+          onSubmit={handleEditSubmit}
+          isDarkMode={isDarkMode}
+        />
+      </Modal>
     </>
   );
 }

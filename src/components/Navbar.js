@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import AuthService from '../services/auth.service';
 
 export default function Navbar({ isDarkMode, toggleTheme }) {
   const { t, i18n } = useTranslation();
@@ -38,7 +39,7 @@ export default function Navbar({ isDarkMode, toggleTheme }) {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = AuthService.getAccessToken();
     setIsLoggedIn(!!token);
   }, []);
 
@@ -48,7 +49,7 @@ export default function Navbar({ isDarkMode, toggleTheme }) {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    AuthService.clearTokens();
     setIsLoggedIn(false);
     router.push('/auth/login');
   };

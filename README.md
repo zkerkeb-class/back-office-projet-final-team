@@ -62,13 +62,13 @@ https://cours-react.notion.site/Partie-2-Backoffice-144858a1a0c38035b44dd830a8e3
   - [ ] Mettre en place la gestion fine des permissions
   - [ ] Implémenter l'audit log des actions administrateurs
 
-- [ ] Assurer la sécurité renforcée avec protection CSRF et gestion des tokens
+- [x] Assurer la sécurité renforcée avec protection CSRF et gestion des tokens
 
-  - [ ] Implémenter la protection CSRF
-  - [ ] Valider les données côté client
-  - [ ] Gérer les tokens de manière sécurisée
+  - [x] Implémenter la protection CSRF
+  - [x] Valider les données côté client
+  - [x] Gérer les tokens de manière sécurisée
 
 - [x] Ajouter le mode hors ligne et les thèmes Jour/Nuit
 - [x] Internationaliser l'application (i18n) pour les données statiques
-- [ ] Garantir l'accessibilité WCAG AA
+- [x] Garantir l'accessibilité WCAG AA
 - [x] Effectuer un audit Lighthouse avec un score supérieur à 85
