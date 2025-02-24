@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import Image from 'next/image';
 import Modal from '../components/Modal';
 import ArtistForm from '../components/ArtistForm';
+import { useRouter } from 'next/router';
 
 export default function Artists() {
   const { t } = useTranslation();
@@ -14,6 +15,7 @@ export default function Artists() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedArtist, setSelectedArtist] = useState(null);
+  const router = useRouter();
 
   const GENRE_DISPLAY_NAMES = {
     rock: 'Rock',
@@ -35,23 +37,29 @@ export default function Artists() {
   const fetchArtists = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/artists`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const selected = router.query.selected;
+
+      let endpoint = `${process.env.NEXT_PUBLIC_API_URL}/artists`;
+      if (selected) {
+        endpoint = `${process.env.NEXT_PUBLIC_API_URL}/artists?id=${selected}`;
+      }
+
+      const response = await fetch(endpoint, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
+
       if (!response.ok) {
         throw new Error('Failed to fetch artists');
       }
+
       const data = await response.json();
-      setArtists(data);
+      setArtists(Array.isArray(data) ? data : [data]);
     } catch (error) {
       alert(t('artists.errors.fetchFailed', { error: error.message }));
     }
-  }, [t]);
+  }, [router.query.selected, t]);
 
   useEffect(() => {
     fetchArtists();
@@ -105,7 +113,7 @@ export default function Artists() {
         alert(t('artists.errors.searchFailed', { error: error.message }));
       }
     } else if (query.length === 0) {
-      fetchArtists();
+      await fetchArtists();
     }
   };
 

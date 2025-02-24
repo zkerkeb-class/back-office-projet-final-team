@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import initI18next from '../i18n';
 import '../pages/globals.css';
 import ProtectedRoute from '../components/ProtectedRoute';
+import { DarkModeProvider } from '../contexts/DarkModeContext';
 
 function MyApp({ Component, pageProps }) {
   const [i18nInitialized, setI18nInitialized] = useState(false);
@@ -22,12 +23,16 @@ function MyApp({ Component, pageProps }) {
   const publicRoutes = ['/auth/login'];
   const isPublicRoute = publicRoutes.includes(Component.route);
 
-  return isPublicRoute ? (
-    <Component {...pageProps} />
-  ) : (
-    <ProtectedRoute>
-      <Component {...pageProps} />
-    </ProtectedRoute>
+  return (
+    <DarkModeProvider>
+      {isPublicRoute ? (
+        <Component {...pageProps} />
+      ) : (
+        <ProtectedRoute>
+          <Component {...pageProps} />
+        </ProtectedRoute>
+      )}
+    </DarkModeProvider>
   );
 }
 

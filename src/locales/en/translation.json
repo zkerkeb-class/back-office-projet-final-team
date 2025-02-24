@@ -13,6 +13,8 @@
     "edit": "Edit",
     "delete": "Delete",
     "select": "Select",
+    "search": "Search for an album or artist...",
+    "noResults": "No results found",
     "error": {
       "unexpected": "An unexpected error occurred"
     }

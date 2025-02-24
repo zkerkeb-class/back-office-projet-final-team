@@ -13,6 +13,8 @@
     "edit": "Modifier",
     "delete": "Supprimer",
     "select": "Sélectionner",
+    "search": "Rechercher un album ou un artiste...",
+    "noResults": "Aucun résultat trouvé",
     "error": {
       "unexpected": "Une erreur inattendue s'est produite"
     }

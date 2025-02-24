@@ -5,17 +5,19 @@ import Image from 'next/image';
 import Navbar from '../components/Navbar';
 import Modal from '../components/Modal';
 import AlbumForm from '../components/AlbumForm';
+import { useRouter } from 'next/router';
 
 export default function Albums() {
   const { t } = useTranslation();
+  const router = useRouter();
   const [albums, setAlbums] = useState([]);
   const [filteredAlbums, setFilteredAlbums] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading] = useState(true);
+  const [error] = useState(null);
   const [page, setPage] = useState(1);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [metadata, setMetadata] = useState({
+  const [metadata] = useState({
     currentPage: 1,
     itemsPerPage: 12,
     totalItems: 0,
@@ -42,39 +44,38 @@ export default function Albums() {
     setIsDarkMode(!isDarkMode);
   };
 
-  const fetchAlbums = useCallback(
-    async (currentPage) => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/albums?page=${currentPage}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
+  const fetchAlbums = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const selected = router.query.selected;
 
-        if (!response.ok) throw new Error('Failed to fetch albums');
-
-        const data = await response.json();
-        setAlbums(data.data || []);
-        if (data.metadata) {
-          setMetadata(data.metadata);
-        }
-        setError(null);
-      } catch (error) {
-        setError(t('common.error.fetchFailed'));
-      } finally {
-        setLoading(false);
+      let endpoint = `${process.env.NEXT_PUBLIC_API_URL}/albums`;
+      if (selected) {
+        endpoint = `${process.env.NEXT_PUBLIC_API_URL}/albums?id=${selected}`;
+      } else {
+        endpoint = `${process.env.NEXT_PUBLIC_API_URL}/albums?page=${page}`;
       }
-    },
-    [t],
-  );
+
+      const response = await fetch(endpoint, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch albums');
+      }
+
+      const data = await response.json();
+      setAlbums(Array.isArray(data) ? data : [data]);
+    } catch (error) {
+      alert(t('albums.errors.fetchFailed', { error: error.message }));
+    }
+  }, [router.query.selected, t, page]);
 
   useEffect(() => {
-    fetchAlbums(page);
-  }, [page, fetchAlbums]);
+    fetchAlbums();
+  }, [fetchAlbums]);
 
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
@@ -102,7 +103,6 @@ export default function Albums() {
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
-    fetchAlbums(newPage);
   };
 
   const handleDelete = async (id) => {
@@ -288,7 +288,7 @@ export default function Albums() {
                   <Image
                     src={
                       album.image_url?.urls?.medium?.webp ||
-                      '/placeholder-album.jpg'
+                      'https://placehold.co/300x300/png'
                     }
                     alt={album.title}
                     layout="fill"
@@ -307,14 +307,18 @@ export default function Albums() {
                   <div className="mt-2 flex flex-wrap gap-2">
                     {(Array.isArray(album.genre)
                       ? album.genre
-                      : [album.genre]
+                      : album.genre
+                        ? [album.genre]
+                        : []
                     ).map((genre, idx) => (
                       <span
                         key={idx}
                         className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-200"
                       >
                         {GENRE_DISPLAY_NAMES[genre] ||
-                          genre.charAt(0).toUpperCase() + genre.slice(1)}
+                          (genre
+                            ? genre.charAt(0).toUpperCase() + genre.slice(1)
+                            : 'Unknown')}
                       </span>
                     ))}
                   </div>

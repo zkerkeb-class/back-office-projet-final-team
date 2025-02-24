@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import AuthService from '../services/auth.service';
+import GlobalSearch from './GlobalSearch';
 
 export default function Navbar({ isDarkMode, toggleTheme }) {
   const { t, i18n } = useTranslation();
@@ -86,6 +87,8 @@ export default function Navbar({ isDarkMode, toggleTheme }) {
           </div>
 
           <div className="flex items-center space-x-4">
+            <GlobalSearch />
+
             <div className="relative" ref={languageMenuRef}>
               <button
                 onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
